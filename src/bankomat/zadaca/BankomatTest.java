@@ -117,23 +117,24 @@ public class BankomatTest {
 			} else if (!korisnik.isAdmin() && izborKorisnik == 2) {
 				System.out.println("Unesite iznos koji zelite podici\n");
 				int iznos = input.nextInt();
-				if (b1.getBalance() - iznos >= 0) {
+				if ((b1.getBalance() - iznos >= 0)
+						&& (korisnik.getBalance() - iznos >= 0)) {
 					korisnik.withdraw(iznos);
 					b1.setBalance(b1.getBalance() - iznos);
 					b1 = deductBils(iznos, b1);
 				} else {
-					System.out
-							.println("Nedovoljno sredstava za vasu transakciju, molimo idite u najblizu poslovnicu.");
+					if (korisnik.getBalance() - iznos < 0) {
+						System.out
+								.println("Stanje na racunu nije dovoljno za transakciju, vase stanje na racunu je:  "
+										+ korisnik.getBalance() + "\n");
+					} else {
+						System.out
+								.println("Nedovoljno sredstava za vasu transakciju, molimo idite u najblizu poslovnicu.\n");
+					}
 				}
 			} else if (!korisnik.isAdmin() && izborKorisnik == 3) {
 				repeat = false;
 			}
-			// else {
-			// System.out
-			// .println("U bankomatu nema dovoljno sredstava za vasu transakciju\n");
-			// }
-			// System.out.println("Preostalo stanje na racunu je: \n"
-			// + korisnik.getBalance());
 
 		}
 		upisStanjaUFile(b1);
