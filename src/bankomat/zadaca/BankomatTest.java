@@ -15,23 +15,20 @@ public class BankomatTest {
 		Korisnik admin = new Korisnik("Goran", "1234", 0);
 		b1.listaKorisnika.add(admin);
 		admin.setAdmin(true);
-		File file = new File("stanje.txt");
-		Scanner fromFile = new Scanner(file);
-		while (fromFile.hasNextInt()) {
-			b1.setDeset(fromFile.nextInt());
-			b1.setDvadeset(fromFile.nextInt());
-			b1.setPedeset(fromFile.nextInt());
-			b1.setSto(fromFile.nextInt());
-		}
-
-		b1.listaKorisnika.addAll(popunjavaListu(b1));
+		b1 = ucitavanjeStanja(b1); // metod postavlja stanje u bankomatu tako
+									// sto cita iz file-a("stanje.txt")
+		b1.listaKorisnika.addAll(popunjavaListu(b1)); // metod popunjava listu
+														// citajuci iz
+														// file-a("datoteka.txt")
 		System.out.println("Unesite USERNAME i PASSWORD korisnika: ");
 		String userName = input.nextLine();
 		String userPass = input.nextLine();
 		Korisnik korisnik = new Korisnik();
 		boolean repeat = true;
-
 		boolean postojeciKorisnik = false;
+
+		// metod pretrazuje listu da bi pronasao koji se korisnik ulogovao admin
+		// se razlikuje po boolean vrijednosti isAdmin
 		for (Korisnik k : b1.getListaKorisnika()) {
 			if (k.getUserName().equals(userName)
 					&& (k.getPassword().equals(userPass))) {
@@ -57,14 +54,15 @@ public class BankomatTest {
 
 			if (korisnik.isAdmin()) {
 				System.out
-						.println("Izaberite zeljenu operaciju:\n1. Pregled stanja na bankomatu \n2. Dodavanje/brisanje novog korisnika \n3. Logout\n");
+						.println("Izaberite zeljenu operaciju:\n1. Pregled stanja na bankomatu \n2. Dodavanje/brisanje novog korisnika \n3. Dopuna novcanica\n4. Logout\n");
 			} else {
 				System.out
 						.println("Izaberite zeljenu operaciju:\n1. Pregled stanja na racunu \n2. Podizanje novca \n3. Logout\n");
 
 			}
 			int izborKorisnik = input.nextInt();
-
+			// if-ovi od 60 linije do 106 linije sluze da vode admina kroz
+			// operacije koje obavlja
 			if (korisnik.isAdmin() && izborKorisnik == 1) {
 				System.out
 						.println("Broj novcanica od 10KM je: "
@@ -107,10 +105,15 @@ public class BankomatTest {
 					}
 				}
 			} else if (korisnik.isAdmin() && izborKorisnik == 3) {
+				b1 = dopunaNovcanica(b1);
+
+			} else if (korisnik.isAdmin() && izborKorisnik == 4) {
 				repeat = false;
 			} else {
 
 			}
+			// if-ovi od 111 linije do 134 linije koda vode obicnog korisnika
+			// kroz operacije koje su mu dostupne
 			if (!korisnik.isAdmin() && izborKorisnik == 1) {
 				System.out.println("Stanje na racunu je: "
 						+ korisnik.getBalance() + "\n");
@@ -137,8 +140,9 @@ public class BankomatTest {
 			}
 
 		}
-		upisStanjaUFile(b1);
-		upisKorisnikaUFile(b1);
+		upisStanjaUFile(b1); // upisuje stanje novcanica u file da bi se
+								// sacuvalo za sledece pokretanje programa
+		upisKorisnikaUFile(b1);	// upisuje stanje liste korisnika u file
 
 	}
 
@@ -241,6 +245,18 @@ public class BankomatTest {
 
 	}
 
+	public static Bankomat ucitavanjeStanja(Bankomat b) throws IOException {
+		File file = new File("Stanje.txt");
+		Scanner fromFile = new Scanner(file);
+		while (fromFile.hasNextInt()) {
+			b.setDeset(fromFile.nextInt());
+			b.setDvadeset(fromFile.nextInt());
+			b.setPedeset(fromFile.nextInt());
+			b.setSto(fromFile.nextInt());
+		}
+		return b;
+	}
+
 	public static void upisStanjaUFile(Bankomat b) throws IOException {
 		File file = new File("stanje.txt");
 		FileWriter upis = new FileWriter(file);
@@ -254,4 +270,21 @@ public class BankomatTest {
 		}
 	}
 
+	public static Bankomat dopunaNovcanica(Bankomat b) {
+		Scanner input = new Scanner(System.in);
+		System.out
+				.println("Izaberite novcanice koje zelite dopuniti i unesite kolicinu novcanica:\n1. 100KM\n2. 50KM\n3. 20KM\n4. 10KM");
+		int izborKorisnika = input.nextInt();
+		if (izborKorisnika == 1) {
+			b.addSto(input.nextInt());
+		} else if (izborKorisnika == 2) {
+			b.addPedeset(input.nextInt());
+		} else if (izborKorisnika == 3) {
+			b.addDvadeset(input.nextInt());
+		} else if (izborKorisnika == 4) {
+			b.addDeset(input.nextInt());
+		}
+		// input.close();
+		return b;
+	}
 }

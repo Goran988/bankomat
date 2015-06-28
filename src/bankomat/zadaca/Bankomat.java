@@ -28,15 +28,6 @@ public class Bankomat {
 		return deset;
 	}
 
-	public void addDeset(int deset) {
-		if ((balance += 10 * deset) <= 3200 && this.deset + deset <= 60) {
-			this.deset = deset;
-			balance += 10 * deset;
-		} else {
-			System.out.println("Nemoguce dodati iznos.");
-		}
-	}
-
 	public void setDeset(int deset) {
 		this.deset = deset;
 	}
@@ -57,11 +48,23 @@ public class Bankomat {
 		return dvadeset;
 	}
 
+	public void addDeset(int deset) {
+		if (this.deset + deset <= 100) {
+			this.deset += deset;
+			System.out
+					.println("Stanje uspjesno dopunjeno, broj novcanica od 10KM je: "
+							+ getDeset() + "\n");
+		} else {
+			System.out.println("Nemoguce dodati iznos.");
+		}
+	}
+
 	public void addDvadeset(int dvadeset) {
-		if ((balance += 20 * dvadeset) <= 3200
-				&& this.dvadeset + dvadeset <= 30) {
-			this.dvadeset = dvadeset;
-			balance += 20 * dvadeset;
+		if (this.dvadeset + dvadeset <= 100) {
+			this.dvadeset += dvadeset;
+			System.out
+					.println("Stanje uspjesno dopunjeno, broj novcanica od 20KM je: "
+							+ getDvadeset() + "\n");
 		} else {
 			System.out.println("Nemoguce dodati iznos.");
 		}
@@ -72,9 +75,11 @@ public class Bankomat {
 	}
 
 	public void addPedeset(int pedeset) {
-		if ((balance += 50 * pedeset) <= 3200 && this.pedeset + pedeset <= 20) {
-			this.pedeset = pedeset;
-			balance += 50 * pedeset;
+		if (this.pedeset + pedeset <= 100) {
+			this.pedeset += pedeset;
+			System.out
+					.println("Stanje uspjesno dopunjeno, broj novcanica od 50KM je: "
+							+ getPedeset() + "\n");
 		} else {
 			System.out.println("Nemoguce dodati iznos.");
 		}
@@ -85,9 +90,11 @@ public class Bankomat {
 	}
 
 	public void addSto(int sto) {
-		if ((balance += 100 * sto) <= 3200 && this.sto + sto <= 10) {
-			this.sto = sto;
-			balance += 100 * sto;
+		if (this.sto + sto <= 100) {
+			this.sto += sto;
+			System.out
+					.println("Stanje uspjesno dopunjeno, broj novcanica od 100KM je: "
+							+ getSto() + "\n");
 		} else {
 			System.out.println("Nemoguce dodati iznos.");
 		}
@@ -110,7 +117,7 @@ public class Bankomat {
 
 	public void deduct100(int amount) {
 		if (sto - amount >= 0) {
-			this.sto=(sto - amount);
+			this.sto = (sto - amount);
 		}
 	}
 
