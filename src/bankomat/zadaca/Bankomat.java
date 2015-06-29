@@ -2,6 +2,7 @@ package bankomat.zadaca;
 
 import java.util.ArrayList;
 
+//klasa Bankomat sadrzi data field-s i metode potrebne za sve ono sto pripada bankomatu
 public class Bankomat {
 	private int deset = 60;
 	private int dvadeset = 30;
@@ -48,6 +49,8 @@ public class Bankomat {
 		return dvadeset;
 	}
 
+	// metodi addDeset, addDvadeset, addPedeset, addSto omogucavaju da
+	// administrator dopuni broj novcanica u bankomatu
 	public void addDeset(int deset) {
 		if (this.deset + deset <= 100) {
 			this.deset += deset;
@@ -108,13 +111,8 @@ public class Bankomat {
 		this.listaKorisnika = listaKorisnika;
 	}
 
-	public void withdraw(int amount) {
-		if (balance - amount >= 0) {
-			balance = balance - amount;
-
-		}
-	}
-
+	// deduct metodi umanjuju broj novcanica u bankomatu nakon sto se izvrsi
+	// isplata istim
 	public void deduct100(int amount) {
 		if (sto - amount >= 0) {
 			this.sto = (sto - amount);
@@ -142,6 +140,7 @@ public class Bankomat {
 }
 
 class Korisnik {
+	// klasa korisnik sadrzi podatke i metode vezane za korisnika
 	private String userName;
 	private int balance;
 	private boolean admin = false;
@@ -189,6 +188,8 @@ class Korisnik {
 		this.admin = admin;
 	}
 
+	// metod withdraw umanjuje stanje na racunu korisnika za podignuti iznos
+	// ukoliko je transakcija uspijesno izvrsena
 	public void withdraw(int amount) {
 		if (balance - amount >= 0) {
 			balance = balance - amount;
@@ -197,4 +198,5 @@ class Korisnik {
 		}
 
 	}
+
 }

@@ -1,5 +1,5 @@
-Novi novi 3950 
-nekinovi 123 5000 
-Pujomir 12 1000 
+Novi novi 2260 
 Peti 2 100 
 Saban 123 89100 
+Perica 1234 5000 
+Petar 12345 2000 
