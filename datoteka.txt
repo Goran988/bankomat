@@ -1,5 +1,4 @@
-Novi novi 2260 
+Novi novi 2100 
 Peti 2 100 
-Saban 123 89100 
-Perica 1234 5000 
+Saban 123 88760 
 Petar 12345 2000 

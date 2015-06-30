@@ -5,11 +5,12 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class BankomatTest {
 	public static void main(String[] args) throws IOException,
-			FileNotFoundException {
+			FileNotFoundException, InputMismatchException {
 		Scanner input = new Scanner(System.in);
 		Bankomat b1 = new Bankomat();
 		Korisnik admin = new Korisnik("Goran", "1234", 0); // pravimo
@@ -62,7 +63,7 @@ public class BankomatTest {
 				amount = amount - 10;
 				ten--;
 				deset++;
-
+			} else {
 				System.out
 						.println("Nemoguca isplata, molimo vas, idite u najblizu poslovnicu.\n");
 				break;
@@ -127,7 +128,6 @@ public class BankomatTest {
 		} finally {
 
 			upis.close();
-			System.exit(1);
 		}
 
 	}
@@ -201,14 +201,15 @@ public class BankomatTest {
 		return false;
 	}
 
-	public static Bankomat logovanje(Bankomat b) throws IOException {
+	public static Bankomat logovanje(Bankomat b) throws IOException,
+			InputMismatchException {
 		Scanner input = new Scanner(System.in);
 		System.out.println("Unesite USERNAME i PASSWORD korisnika: ");
-		String userName = input.nextLine().trim(); // unosimo korisnicko ime i
-													// pri tome uklanjamo prazan
-													// prostor
-		String userPass = input.nextLine().trim(); // unosimo lozinku i pri tome
-													// uklanjamo prazan prostor
+		String userName = input.next().trim(); // unosimo korisnicko ime i
+												// pri tome uklanjamo prazan
+												// prostor
+		String userPass = input.next().trim(); // unosimo lozinku i pri tome
+												// uklanjamo prazan prostor
 		Korisnik korisnik = new Korisnik();
 		boolean postojeciKorisnik = false;
 		// for each petljom prolazimo kroz listu i poredimo uneseno korisnicko
@@ -247,7 +248,7 @@ public class BankomatTest {
 			// ili ne, prvi dio se odnosi na admina od linije 248 do 334
 			if (korisnik.isAdmin()) {
 				System.out
-						.println("Izaberite zeljenu operaciju:\n1. Pregled stanja na bankomatu \n2. Dodavanje/brisanje novog korisnika \n3. Dopuna novcanica\n4. Logout\n5. Gasenje bankomata\n");
+						.println("Izaberite zeljenu operaciju:\n1. Pregled stanja na bankomatu \n2. Dodavanje/brisanje novog korisnika \n3. Dopuna novcanica\n4. Logout\n5. Lista korisnika\n6. Gasenje bankomata\n Unesite svoj izbor:\n");
 				int korisnikIzbor = input.nextInt();
 				// ispisujemo stanje novcanica i ukupan iznos sredstava u
 				// bankomatu
@@ -265,7 +266,9 @@ public class BankomatTest {
 									+ ((b.getSto() * 100)
 											+ (b.getPedeset() * 50)
 											+ (b.getDvadeset() * 20) + (b
-											.getDeset() * 10)));
+											.getDeset() * 10)) + " KM");
+					System.out.println("Unesite bilo koji broj da nastavite");
+					input.next();
 					System.out.println();
 				}
 				// omogucavamo adminu da pristupi "podmeniju" gdje bira da li
@@ -277,17 +280,24 @@ public class BankomatTest {
 					// opcija podmenija dodaje novog korisnika
 					if (adminIzbor == 1) {
 						System.out
-								.println("Unesite USERNAME, PASSWORD i iznos na racunu novog korisnika\n");
+								.println("Unesite USERNAME, PASSWORD(cetverocifreni broj) i iznos na racunu novog korisnika\n");
 						Korisnik k2 = new Korisnik();
 						String userNameNoviKorisnik = input.next();
+						String password = input.next();
+						int balance = input.nextInt();
 						if (!provjeraPostojeciKorisnik(b, userNameNoviKorisnik)) {
 							k2.setUserName(userNameNoviKorisnik);
-							k2.setPassword(input.next());
-							k2.setBalance(input.nextInt());
+							k2.setPassword(password);
+							k2.setBalance(balance);
 							b.listaKorisnika.add(k2);
-							System.out.println("Uspjesno ste dodali korisnika "
-									+ k2.getUserName() + "\n");
+							System.out
+									.println("Uspjesno ste dodali korisnika \""
+											+ k2.getUserName()
+											+ "\", promjene ce biti trajno sacuvane kada se izlogujete.\n");
 
+						} else {
+							System.out.println("Korisnicko ime \""
+									+ userNameNoviKorisnik + "\" je zauzeto.\n");
 						}
 
 					}
@@ -304,11 +314,22 @@ public class BankomatTest {
 									.getUserName())) {
 								obrisao = true;
 								System.out
-										.println("Uspjesno ste obrisali korisnika "
+										.println("Da li ste sigurni da zelite obrisati korisnika "
 												+ b.listaKorisnika.get(i)
-														.getUserName() + "\n");
-								b.getListaKorisnika().remove(
-										b.listaKorisnika.get(i));
+														.getUserName()
+												+ "?\nDa potvrdite unesite svoj PASSWORD, za povratak u prijasnji meni unesite bilo koji drugi broj.\n");
+								if (input.nextInt() == 1234) {
+
+									System.out
+											.println("Uspjesno ste obrisali korisnika "
+													+ b.listaKorisnika.get(i)
+															.getUserName()
+													+ ", promjene ce biti trajno sacuvane kada se izlogujete.\n");
+									b.getListaKorisnika().remove(
+											b.listaKorisnika.get(i));
+								} else {
+									System.out.println("Brisanje otkazano.");
+								}
 							}
 						}
 						// u slucaju da korisnik ne postoji obavestavamo admin-a
@@ -324,12 +345,25 @@ public class BankomatTest {
 				} else if (korisnikIzbor == 4) {
 					System.out.println("Logout...\n");
 					repeat = false;
-					// zatvaramo program ali prije toga vrsimo upis stanja i
-					// korisnika u pripadajuce file-ove
 				} else if (korisnikIzbor == 5) {
-					upisStanjaUFile(b);
-					upisKorisnikaUFile(b);
-					System.exit(1);
+					ispisKorisnika(b);
+					System.out.println("Unesite bilo koji broj da nastavite:");
+					input.next();
+				}
+				// zatvaramo program ali prije toga vrsimo upis stanja i
+				// korisnika u pripadajuce file-ove
+				else if (korisnikIzbor == 6) {
+					System.out
+							.println("Da li ste sigurni da zelite iskljuciti bankomat? Unesite svoj PASSWORD da potvrdite ili bilo koji drugi broj da se vratite u glavni meni.\n");
+					if (input.nextInt() == 1234) {
+						upisStanjaUFile(b);
+						upisKorisnikaUFile(b);
+						System.out.println("Bankomat uspjesno iskljucen!");
+						System.exit(1);
+					} else {
+						System.out
+								.println("Iskljucivanje bankomata ponisteno, vracamo se u glavni meni\n");
+					}
 
 				}
 				// dio kojim obicni korisnik obavlja zeljene radnje od linije
@@ -337,7 +371,7 @@ public class BankomatTest {
 			} else if (!korisnik.isAdmin()) {
 
 				System.out
-						.println("Izaberite zeljenu operaciju:\n1. Pregled stanja na racunu \n2. Podizanje novca \n3. Logout\n");
+						.println("Izaberite zeljenu operaciju:\n1. Pregled stanja na racunu \n2. Podizanje novca \n3. Logout\nUnesite svoj izbor:\n");
 				int korisnikIzbor = input.nextInt();
 				// provjera stanja racuna
 				if (korisnikIzbor == 1) {
@@ -373,7 +407,20 @@ public class BankomatTest {
 
 			}
 		}
+		upisStanjaUFile(b);
+		upisKorisnikaUFile(b);
 		return b;
 
+	}
+
+	// ispis liste korisnika u konzolu
+	public static void ispisKorisnika(Bankomat b) {
+		System.out.println("User\t Pass\tBalance");
+		for (int i = 1; i < b.listaKorisnika.size(); i++) {
+			System.out.println(b.listaKorisnika.get(i).getUserName() + "\t "
+					+ b.listaKorisnika.get(i).getPassword() + "\t"
+					+ b.listaKorisnika.get(i).getBalance() + "\tKM");
+		}
+		System.out.println();
 	}
 }

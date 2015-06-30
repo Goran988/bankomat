@@ -58,7 +58,11 @@ public class Bankomat {
 					.println("Stanje uspjesno dopunjeno, broj novcanica od 10KM je: "
 							+ getDeset() + "\n");
 		} else {
-			System.out.println("Nemoguce dodati iznos.");
+			System.out
+					.println("Nemoguce dodati iznos, trenutno u bankomatu postoji "
+							+ this.getDeset()
+							+ " moguce je dodati jos "
+							+ (100 - this.getDeset()) + " novcanica.");
 		}
 	}
 
@@ -69,8 +73,13 @@ public class Bankomat {
 					.println("Stanje uspjesno dopunjeno, broj novcanica od 20KM je: "
 							+ getDvadeset() + "\n");
 		} else {
-			System.out.println("Nemoguce dodati iznos.");
+			System.out
+					.println("Nemoguce dodati iznos, trenutno u bankomatu postoji "
+							+ this.getDvadeset()
+							+ " moguce je dodati jos "
+							+ (100 - this.getDvadeset()) + " novcanica.");
 		}
+
 	}
 
 	public int getPedeset() {
@@ -84,7 +93,12 @@ public class Bankomat {
 					.println("Stanje uspjesno dopunjeno, broj novcanica od 50KM je: "
 							+ getPedeset() + "\n");
 		} else {
-			System.out.println("Nemoguce dodati iznos.");
+			System.out
+					.println("Nemoguce dodati iznos, trenutno u bankomatu postoji "
+							+ this.getPedeset()
+							+ " moguce je dodati jos "
+							+ (100 - this.getPedeset()) + " novcanica.");
+
 		}
 	}
 
@@ -99,7 +113,11 @@ public class Bankomat {
 					.println("Stanje uspjesno dopunjeno, broj novcanica od 100KM je: "
 							+ getSto() + "\n");
 		} else {
-			System.out.println("Nemoguce dodati iznos.");
+			System.out
+					.println("Nemoguce dodati iznos, trenutno u bankomatu postoji "
+							+ this.getSto()
+							+ " moguce je dodati jos "
+							+ (100 - this.getSto()) + " novcanica.");
 		}
 	}
 
