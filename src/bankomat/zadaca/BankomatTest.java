@@ -280,25 +280,47 @@ public class BankomatTest {
 					// opcija podmenija dodaje novog korisnika
 					if (adminIzbor == 1) {
 						System.out
-								.println("Unesite USERNAME, PASSWORD(cetverocifreni broj) i iznos na racunu novog korisnika\n");
+								.println("Unesite USERNAME novog korisnika: ");
 						Korisnik k2 = new Korisnik();
-						String userNameNoviKorisnik = input.next();
-						String password = input.next();
-						int balance = input.nextInt();
-						if (!provjeraPostojeciKorisnik(b, userNameNoviKorisnik)) {
-							k2.setUserName(userNameNoviKorisnik);
-							k2.setPassword(password);
-							k2.setBalance(balance);
-							b.listaKorisnika.add(k2);
-							System.out
-									.println("Uspjesno ste dodali korisnika \""
-											+ k2.getUserName()
-											+ "\", promjene ce biti trajno sacuvane kada se izlogujete.\n");
-
-						} else {
-							System.out.println("Korisnicko ime \""
-									+ userNameNoviKorisnik + "\" je zauzeto.\n");
+						String userNameNoviKorisnik = "";
+						boolean goodUsername = false;
+						while (!goodUsername) {
+							String newUserName = input.next();
+							if (!provjeraPostojeciKorisnik(b, newUserName)) {
+								userNameNoviKorisnik = newUserName;
+								goodUsername=true;
+							} else {
+								System.out
+										.println("USERNAME je zauzet pokusajte dodjeliti drugi USERNAME: ");
+							}
 						}
+						String password = "";
+						boolean goodPassword = false;
+						System.out
+								.println("Unesite PASSWORD(cetverocifreni broj) novog korisnika: ");
+						while (!goodPassword) {
+							String pass = input.next();
+							if (passwordBroj(pass) && pass.length() <= 4) {
+								int num = Integer.parseInt(pass);
+								password = String.format("%04d", num);
+								goodPassword = true;
+
+							} else {
+								System.out
+										.println("Napavili ste gresku pri kreiranju PASSWORDA pokusajte ponovo:");
+							}
+						}
+						System.out
+								.println("Unesite stanje na racunu korisnika: ");
+						int balance = input.nextInt();
+						k2.setUserName(userNameNoviKorisnik);
+						k2.setPassword(password);
+						k2.setBalance(balance);
+						b.listaKorisnika.add(k2);
+						System.out
+								.println("Uspjesno ste dodali korisnika \""
+										+ k2.getUserName()
+										+ "\", promjene ce biti trajno sacuvane kada se izlogujete.\n");
 
 					}
 					// opcija podmenija za brisanje postojeceg korisnika
@@ -366,6 +388,9 @@ public class BankomatTest {
 					}
 
 				}
+				else{
+					System.out.println("Unjeli ste nepostojecu komandu, pokusajte ponovo: \n");
+				}
 				// dio kojim obicni korisnik obavlja zeljene radnje od linije
 				// 336 do
 			} else if (!korisnik.isAdmin()) {
@@ -404,6 +429,9 @@ public class BankomatTest {
 					repeat = false;
 
 				}
+				else{
+					System.out.println("Unjeli ste broj kome nije dodjeljena funkcija, pokusajte ponovo:\n");
+				}
 
 			}
 		}
@@ -422,5 +450,16 @@ public class BankomatTest {
 					+ b.listaKorisnika.get(i).getBalance() + "\tKM");
 		}
 		System.out.println();
+	}
+
+	// metod koji provjerava da li je uneseni password broj
+	public static boolean passwordBroj(String pass) {
+		for (int i = 0; i < pass.length(); i++) {
+			if (!Character.isDigit(pass.charAt(i))) {
+				return false;
+			}
+
+		}
+		return true;
 	}
 }

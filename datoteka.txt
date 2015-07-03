@@ -2,3 +2,5 @@ Novi novi 2100
 Peti 2 100 
 Saban 123 88760 
 Petar 12345 2000 
+Pujo 0123 2500 
+Simo 0007 2500 
